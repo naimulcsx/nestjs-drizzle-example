@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm';
+import { InferSelectModel, sql } from 'drizzle-orm';
 import { serial, text, pgTable, timestamp } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
@@ -12,6 +12,8 @@ export const users = pgTable('users', {
     () => sql`CURRENT_TIMESTAMP`,
   ),
 });
+
+export type User = InferSelectModel<typeof users>;
 
 export const databaseSchema = {
   users,
