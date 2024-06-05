@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  postgres:
+    image: postgres:16.3-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=aYKH8gnMK4ho
+      - POSTGRES_DB=app
+    ports:
+      - '5432:5432'
+    volumes:
+      - /var/lib/postgresql/data
+
+  pgweb:
+    image: sosedoff/pgweb:0.15.0
+    restart: unless-stopped
+    ports:
+      - '8081:8081'
+    links:
+      - postgres:postgres
+    environment:
+      - DATABASE_URL=postgres://postgres:aYKH8gnMK4ho@postgres:5432/app?sslmode=disable
