@@ -1,11 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { DrizzleService } from 'src/database/drizzle.service';
-import { RegisterDto } from '../dto/register.dto';
 import { HashingService } from './hashing.service';
 import { users } from 'src/database/database-schema';
 import { eq } from 'drizzle-orm';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { SignUpDto } from '../dto/sign-up.dto';
 
 @Injectable()
 export class AuthService {
@@ -41,14 +41,14 @@ export class AuthService {
     return user;
   }
 
-  async register(registerDto: RegisterDto) {
-    const hashedPassword = await this.hashingService.hash(registerDto.password);
+  async signUp(signUpDto: SignUpDto) {
+    const hashedPassword = await this.hashingService.hash(signUpDto.password);
 
     // check if the email is already used
     const [userWithEmail] = await this.drizzleService.db
       .select()
       .from(users)
-      .where(eq(users.email, registerDto.email));
+      .where(eq(users.email, signUpDto.email));
 
     if (userWithEmail) {
       throw new BadRequestException('Email already used');
@@ -58,7 +58,7 @@ export class AuthService {
     const [user] = await this.drizzleService.db
       .insert(users)
       .values({
-        ...registerDto,
+        ...signUpDto,
         password: hashedPassword,
       })
       .returning();

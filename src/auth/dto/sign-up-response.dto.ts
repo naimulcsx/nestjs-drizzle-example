@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class RegisterResponseDto {
+export class SignUpResponseDto {
   @ApiProperty({
     description: 'Unique identifier of the user',
   })

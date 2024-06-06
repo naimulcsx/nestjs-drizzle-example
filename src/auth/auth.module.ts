@@ -7,6 +7,8 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { HashingService } from './providers/hashing.service';
 import { BcryptService } from './providers/bcrypt.service';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -24,6 +26,10 @@ import { BcryptService } from './providers/bcrypt.service';
   ],
   providers: [
     { provide: HashingService, useClass: BcryptService },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
     AuthService,
     LocalStrategy,
     JwtStrategy,
